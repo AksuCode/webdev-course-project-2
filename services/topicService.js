@@ -12,4 +12,8 @@ const deleteTopic = async (id) => {
     await sql`DELETE FROM topics WHERE id = ${id}`;
 }
 
-export { allTopics, addTopic, deleteTopic }
+const topicWithId = async (id) => {
+    return await sql`SELECT * FROM topics WHERE id = ${id}`;
+}
+ 
+export { allTopics, addTopic, deleteTopic, topicWithId }

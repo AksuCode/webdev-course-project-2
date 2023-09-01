@@ -8,4 +8,8 @@ const deleteQuestionsOfTopic = async (topic_id) =>  {
     await sql`DELETE FROM questions WHERE topic_id = ${topic_id}`;
 }
 
-export { allTopicQuestions, deleteQuestionsOfTopic };
+const addQuestion = async (question_text, topic_id, user_id) => {
+    await sql`INSERT INTO questions (question_text, topic_id, user_id) VALUES (${question_text}, ${topic_id}, ${user_id})`;
+}
+
+export { allTopicQuestions, deleteQuestionsOfTopic, addQuestion};
