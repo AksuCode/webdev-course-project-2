@@ -85,7 +85,7 @@ const deleteTopic = async ({ params, response , state}) => {
             if (allTopicQuestions.length > 0) {
                 for (let i = 0; i < allTopicQuestions.length; i++) {
                     const question_id = (allTopicQuestions[i]).id;
-                    await answerService.deleteAnsOptionsOfQuestion(question_id);
+                    await answerService.deleteAnswers(question_id);
                     await answerOptionService.deleteAnsOptionsOfQuestion(question_id);
                 }
                 await questionService.deleteQuestionsOfTopic(topic_id);

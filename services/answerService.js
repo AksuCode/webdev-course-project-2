@@ -4,8 +4,12 @@ const allQuestionAnswers = async (question_id) => {
     return await sql`SELECT * FROM question_answers WHERE question_id = ${question_id}`;
 }
 
-const deleteAnsOptionsOfQuestion = async (question_id) =>  {
+const deleteAnswers = async (question_id) =>  {
     await sql`DELETE FROM question_answers WHERE question_id = ${question_id}`;
 }
 
-export { allQuestionAnswers, deleteAnsOptionsOfQuestion }
+const addAnswer = async (user_id, question_id, question_answer_option_id) => {
+    await sql`INSERT INTO question_answers (user_id, question_id, question_answer_option_id) VALUES (${user_id}, ${question_id}, ${question_answer_option_id})`;
+}
+
+export { allQuestionAnswers, deleteAnswers, addAnswer }

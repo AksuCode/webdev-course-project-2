@@ -1,7 +1,7 @@
 import { sql } from "../database/database.js";
 
 const allTopics = async () => {
-    return await sql`SELECT * FROM topics ORDER BY name DESC`;
+    return await sql`SELECT * FROM topics ORDER BY name ASC`;
 }
 
 const addTopic = async (name, user_id) => {

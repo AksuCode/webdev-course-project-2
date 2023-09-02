@@ -5,6 +5,7 @@ import * as registerController from "./controllers/registerController.js";
 import * as loginController from "./controllers/loginController.js";
 import * as questionController from "./controllers/questionController.js";
 import * as answerOptionController from "./controllers/answerOptionController.js";
+import * as quizController from "./controllers/quizController.js";
 
 const router = new Router();
 
@@ -18,6 +19,11 @@ router.get("/", mainController.showMain)
     .post("/topics/:id/questions/:qId/options", answerOptionController.addAnswerOption)
     .post("/topics/:tId/questions/:qId/options/:oId/delete", answerOptionController.deleteAnswerOption)
     .post("/topics/:tId/questions/:qId/delete", questionController.deleteQuestion)
+    .get("/quiz", quizController.showQuizTopics)
+    .get("/quiz/:tId", quizController.randomTopicQuestion)
+    .get("/quiz/:tId/questions/:qId", quizController.showQuizQuestion)
+    .post("/quiz/:tId/questions/:qId/options/:oId", quizController.handleAnswer)
+    .get("/quiz/:tId/questions/:qId/:result", quizController.showAnswerResult)
     .get("/auth/register", registerController.getRegister)
     .post("/auth/register", registerController.postRegister)
     .get("/auth/login", loginController.getLogin)
