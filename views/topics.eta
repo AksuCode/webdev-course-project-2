@@ -16,7 +16,7 @@
 
     <p>Add topic:</p>
     <form action="/topics" method="POST">
-        <input type="text" name="name" value="<%= it.topic_name %>">
+        <input type="text" name="name" placeholder="Topic" value="<%= it.topic_name %>">
         <%~ includeFile("./partials/errorList.eta", { errors: it.errors, attribute: "topic_name"}) %>
         <input type="submit" value="Submit">
     </from>

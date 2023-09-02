@@ -15,13 +15,7 @@
 <h2>Add question</h2>
 
 <form method="POST" action="/topics/<%= it.topic.id %>/questions">
-    <table>
-        <tr>
-            <td><input type="text" name="question_text" placeholder="Question" value="<%= it.question_text %>"></td>
-            <td><input type="submit" value="Submit!"><td>
-        </tr>
-        <tr>
-            <td><%~ includeFile("./partials/errorList.eta", { errors: it.errors, attribute: "question_text"}) %></td>
-        </tr>
-    </table>
+    <input type="text" name="question_text" placeholder="Question" value="<%= it.question_text %>">
+    <%~ includeFile("./partials/errorList.eta", { errors: it.errors, attribute: "question_text"}) %>
+    <input type="submit" value="Submit!">
 </form>

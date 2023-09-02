@@ -4,7 +4,7 @@ import * as answerOptionService from "../../services/answerOptionService.js";
 
 
 
-const showAnswerOption = async ({ params, render }) => {
+const showAnswerOption = async ({ params, render, state }) => {
 
     const topic_id = params.id;
     const question_id = params.qId;
@@ -13,6 +13,7 @@ const showAnswerOption = async ({ params, render }) => {
         answer_options: await answerOptionService.allQuestionAnsOptions(question_id),
         question: (await questionService.questionWithId(question_id))[0],
         option_text: "",
+        authenticated: await state.session.get("authenticated") === true,
         errors: {},
     }
 
@@ -39,10 +40,11 @@ const addAnswerOption = async ({ params, request, state, render , response}) => 
         answer_options: await answerOptionService.allQuestionAnsOptions(question_id),
         question: (await questionService.questionWithId(question_id))[0],
         option_text: formData.get("option_text"),
+        authenticated: await state.session.get("authenticated") === true,
         errors: {},
     }
 
-    if (await state.session.get("authenticated")) {
+    if (data.authenticated) {
         const [passes, errors] = await validasaur.validate(data, optionDataValidationRules);
         if (passes) {
             const is_correct = formData.get("is_correct") !== null;
@@ -63,4 +65,23 @@ const addAnswerOption = async ({ params, request, state, render , response}) => 
 }
 
 
-export { showAnswerOption, addAnswerOption }
+
+const deleteAnswerOption = async ({ params, response , state}) => {
+
+    const topic_id = params.tId;
+    const question_id = params.qId;
+    const option_id = params.oId;
+
+    if (await state.session.get("authenticated")) {
+        answerOptionService.deleteAnsOption(option_id);
+        response.redirect(`/topics/${topic_id}/questions/${question_id}`);
+    }
+
+    else {
+        response.redirect(`/topics/${topic_id}/questions/${question_id}`);
+    }
+
+}
+
+
+export { showAnswerOption, addAnswerOption, deleteAnswerOption }

@@ -80,11 +80,11 @@ const deleteTopic = async ({ params, response , state}) => {
     if (await state.session.get("authenticated")) {
         if ((await state.session.get("user")).admin) {    
             
-            const allTopicQuestionsId = (await questionService.allTopicQuestions(topic_id)).id;
+            const allTopicQuestions = await questionService.allTopicQuestions(topic_id);
 
-            if (allTopicQuestionsId) {
-                for (let i = 0; i < allTopicQuestionsId.length; i++) {
-                    const question_id = allTopicQuestionsId[i];
+            if (allTopicQuestions.length > 0) {
+                for (let i = 0; i < allTopicQuestions.length; i++) {
+                    const question_id = (allTopicQuestions[i]).id;
                     await answerService.deleteAnsOptionsOfQuestion(question_id);
                     await answerOptionService.deleteAnsOptionsOfQuestion(question_id);
                 }
