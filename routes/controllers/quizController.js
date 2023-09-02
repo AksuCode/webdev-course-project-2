@@ -63,7 +63,7 @@ const handleAnswer = async ({ response, params, state }) => {
 
     await answerService.addAnswer(user_id, question_id, option_id);
 
-    const chosen_option = await answerOptionService.optionWithId(option_id);
+    const chosen_option = (await answerOptionService.optionWithId(option_id))[0];
 
     if (chosen_option.is_correct) {
         response.redirect(`/quiz/${topic_id}/questions/${question_id}/correct`);
@@ -78,7 +78,25 @@ const handleAnswer = async ({ response, params, state }) => {
 
 
 const showAnswerResult = async ({ render, params }) => {
-    
+
+    const topic_id = params.tId;
+    const question_id = params.qId;
+    const correct = "correct" === params.result;
+
+    const data = {
+        correct: correct,
+        topic_id: topic_id,
+        correct_answer: "",
+    }
+
+    if (correct) {
+        render("quiz_result.eta", data);
+    }
+
+    else {
+        data.correct_answer = (await answerOptionService.questionAnswers(question_id))[0].option_text;
+        render("quiz_result.eta", data);
+    }
 }
 
 
