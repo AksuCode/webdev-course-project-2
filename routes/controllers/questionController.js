@@ -48,6 +48,8 @@ const addQuestion = async ({ params, request, state, render , response}) => {
         }
 
         else {
+            data.errors = errors;
+            response.pathname = `/topics/${topic_id}`;
             render("questions.eta", data);
         }
     }

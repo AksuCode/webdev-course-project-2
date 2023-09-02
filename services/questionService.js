@@ -12,4 +12,8 @@ const addQuestion = async (question_text, topic_id, user_id) => {
     await sql`INSERT INTO questions (question_text, topic_id, user_id) VALUES (${question_text}, ${topic_id}, ${user_id})`;
 }
 
-export { allTopicQuestions, deleteQuestionsOfTopic, addQuestion};
+const questionWithId = async (id) => {
+    return await sql`SELECT * FROM questions WHERE id = ${id}`;
+}
+
+export { allTopicQuestions, deleteQuestionsOfTopic, addQuestion, questionWithId};
