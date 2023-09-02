@@ -16,4 +16,8 @@ const questionWithId = async (id) => {
     return await sql`SELECT * FROM questions WHERE id = ${id}`;
 }
 
-export { allTopicQuestions, deleteQuestionsOfTopic, addQuestion, questionWithId};
+const deleteQuestion = async (id) =>  {
+    await sql`DELETE FROM questions WHERE id = ${id}`;
+}
+
+export { allTopicQuestions, deleteQuestionsOfTopic, addQuestion, questionWithId, deleteQuestion };
