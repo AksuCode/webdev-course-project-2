@@ -1,8 +1,0 @@
-
-<% if (it.listable.length > 0) { %>
-    <ul>
-        <% it.listable.forEach( (obj) => { %>
-            <li><a href="<%= it.path %>/<%= obj.id %>"><%= obj.name %></a></li> 
-        <% }); %>
-    </ul>
-<% } %>

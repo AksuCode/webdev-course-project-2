@@ -1,6 +1,7 @@
 <% layout("./layouts/layout.eta") %>
 
-<h1><%= it.question.question_text %></h1>
+<h1>Question: <%= it.question.question_text %></h1>
+<p><a href="/topics/<%= it.question.topic_id %>">Back to the questions page</a></p>
 
 <h2>Answer options</h2>
 

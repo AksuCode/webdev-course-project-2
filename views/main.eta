@@ -1,13 +1,16 @@
 <% layout("./layouts/layout.eta") %>
 
 <h1>Q&A</h1>
-<a href="/auth/login">Login</a>
-<a href="/auth/register">Register</a>
+<p><a href="/auth/login">Login</a></p>
+<p><a href="/auth/register">Register</a></p>
 
 <h2>Description:</h2>
 
-<p>...a brief description of the application...</p>
+<p>This application allows users to create new questions and answer options to topics
+created by the admins. These questions can then be answered in the form of a quiz with the same topic.</p>
 
 <h2>Statistics:</h2>
 
-<p>The application statistics show the total number of topics, questions, and question answers (i.e. answers from users).</p>
+<p>Topic count <%= it.topic_count %></p>
+<p>Question count <%= it.question_count %></p>
+<p>Question answer count <%= it.answer_count %></p>
