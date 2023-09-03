@@ -118,4 +118,10 @@ const showAnswerResult = async ({ render, params }) => {
 
 
 
-export { showQuizTopics, randomTopicQuestion, showQuizQuestion, handleAnswer, showAnswerResult }
+export { 
+    showQuizTopics, 
+    randomTopicQuestion, 
+    showQuizQuestion, 
+    handleAnswer, 
+    showAnswerResult,
+}

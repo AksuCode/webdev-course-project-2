@@ -7,7 +7,7 @@
 <% if (it.answer_options.length > 0) { %>
     <ul>
         <% it.answer_options.forEach( (option) => { %>
-            <li><%= option.option_text %><% if (option.is_correct) { %> &#9989;<% } else { %> &#10060;<% } %><% if (it.authenticated) { %><form method="POST" action="/topics/<%= it.question.topic_id %>/questions/<%= it.question.id %>/options/<%= option.id %>/delete"><input type="submit" value="Delete option"></form><% } %></li> 
+            <li><%= option.option_text %><% if (option.is_correct) { %> &#9989;<% } else { %> &#10060;<% } %><form method="POST" action="/topics/<%= it.question.topic_id %>/questions/<%= it.question.id %>/options/<%= option.id %>/delete"><input type="submit" value="Delete option"></form></li> 
         <% }); %>
     </ul>
 <% } %>

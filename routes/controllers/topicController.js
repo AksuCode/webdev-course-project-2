@@ -5,7 +5,7 @@ import * as answerService from "../../services/answerService.js";
 import * as answerOptionService from "../../services/answerOptionService.js";
 
 
-const showTopics = async ({ render, state}) => {
+const showTopics = async ({ render, state }) => {
 
     const data = {
         topics: await topicService.allTopics(),
@@ -13,11 +13,11 @@ const showTopics = async ({ render, state}) => {
         admin: false,
     }
 
-    if (await state.session.get("authenticated")) {
-        if ((await state.session.get("user")).admin) {
-            data.admin = true;
-        }
+
+    if ((await state.session.get("user")).admin) {
+        data.admin = true;
     }
+
 
     render("topics.eta", data);
 }
@@ -36,33 +36,28 @@ const postTopic = async ( {request, response, state, render}) => {
     const body = request.body();
     const params = await body.value;
 
-    if (await state.session.get("authenticated")) {
-        if ((await state.session.get("user")).admin) {    
 
-            const data = {
-                topics: await topicService.allTopics(),
-                topic_name: params.get("name"),
-                admin: true,
-                errors: {},
-            }
+    if ((await state.session.get("user")).admin) {    
 
-            const [passes, errors] = await validasaur.validate(data, topicDataValidationRules);
-            if(passes) {
-                const id = (await state.session.get("user")).id;
-                await topicService.addTopic(data.topic_name, id);
-                response.redirect("/topics");
-            }
+        const data = {
+            topics: await topicService.allTopics(),
+            topic_name: params.get("name"),
+            admin: true,
+            errors: {},
+        }
 
-            else {
-                data.errors = errors;
-                render("topics.eta", data);
-            }
-
+        const [passes, errors] = await validasaur.validate(data, topicDataValidationRules);
+        if(passes) {
+            const id = (await state.session.get("user")).id;
+            await topicService.addTopic(data.topic_name, id);
+            response.redirect("/topics");
         }
 
         else {
-            response.redirect("/topics");
+            data.errors = errors;
+            render("topics.eta", data);
         }
+
     }
 
     else {
@@ -77,28 +72,23 @@ const deleteTopic = async ({ params, response , state}) => {
 
     const topic_id = params.id;
 
-    if (await state.session.get("authenticated")) {
-        if ((await state.session.get("user")).admin) {    
-            
-            const allTopicQuestions = await questionService.allTopicQuestions(topic_id);
 
-            if (allTopicQuestions.length > 0) {
-                for (let i = 0; i < allTopicQuestions.length; i++) {
-                    const question_id = (allTopicQuestions[i]).id;
-                    await answerService.deleteAnswers(question_id);
-                    await answerOptionService.deleteAnsOptionsOfQuestion(question_id);
-                }
-                await questionService.deleteQuestionsOfTopic(topic_id);
+    if ((await state.session.get("user")).admin) {    
+        
+        const allTopicQuestions = await questionService.allTopicQuestions(topic_id);
+
+        if (allTopicQuestions.length > 0) {
+            for (let i = 0; i < allTopicQuestions.length; i++) {
+                const question_id = (allTopicQuestions[i]).id;
+                await answerService.deleteAnswers(question_id);
+                await answerOptionService.deleteAnsOptionsOfQuestion(question_id);
             }
-            
-            await topicService.deleteTopic(topic_id);
-
-            response.redirect("/topics");
+            await questionService.deleteQuestionsOfTopic(topic_id);
         }
+        
+        await topicService.deleteTopic(topic_id);
 
-        else {
-            response.redirect("/topics");
-        }
+        response.redirect("/topics");
     }
 
     else {

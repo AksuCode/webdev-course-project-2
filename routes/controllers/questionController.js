@@ -5,7 +5,7 @@ import { validasaur } from "../../deps.js";
 
 
 
-const showQuestions = async ({ params, render, state }) => {
+const showQuestions = async ({ params, render }) => {
 
     const topic_id = params.id;
 
@@ -18,7 +18,7 @@ const showQuestions = async ({ params, render, state }) => {
 
     for (let i = 0; i < data.questions.length; i++) {
         const question = data.questions[i];
-        question.delete_allowed = await state.session.get("authenticated") && ((await answerOptionService.allQuestionAnsOptions(question.id)).length < 1);
+        question.delete_allowed = (await answerOptionService.allQuestionAnsOptions(question.id)).length < 1;
         data.questions[i] = question;
     }
 
@@ -48,47 +48,37 @@ const addQuestion = async ({ params, request, state, render , response}) => {
 
     for (let i = 0; i < data.questions.length; i++) {
         const question = data.questions[i];
-        question.delete_allowed = await state.session.get("authenticated") && ((await answerOptionService.allQuestionAnsOptions(question.id)).length < 1);
+        question.delete_allowed = (await answerOptionService.allQuestionAnsOptions(question.id)).length < 1;
         data.questions[i] = question;
     }
 
-    if (await state.session.get("authenticated")) {
-        const [passes, errors] = await validasaur.validate(data, questionDataValidationRules);
-        if (passes) {
-            const user_id = (await state.session.get("user")).id;
-            await questionService.addQuestion(data.question_text, topic_id, user_id);
-            response.redirect(`/topics/${topic_id}`);
-        }
 
-        else {
-            data.errors = errors;
-            response.pathname = `/topics/${topic_id}`;
-            render("questions.eta", data);
-        }
+    const [passes, errors] = await validasaur.validate(data, questionDataValidationRules);
+    if (passes) {
+        const user_id = (await state.session.get("user")).id;
+        await questionService.addQuestion(data.question_text, topic_id, user_id);
+        response.redirect(`/topics/${topic_id}`);
     }
 
     else {
-        response.redirect(`/topics/${topic_id}`);
+        data.errors = errors;
+        response.pathname = `/topics/${topic_id}`;
+        render("questions.eta", data);
     }
 
 }
 
 
 
-const deleteQuestion = async ({ params, response, state}) => {
+const deleteQuestion = async ({ params, response }) => {
 
     const topic_id = params.tId;
     const question_id = params.qId;
 
-    if (await state.session.get("authenticated")) {
-        if ((await answerOptionService.allQuestionAnsOptions(question_id)).length < 1) {
-            await questionService.deleteQuestion(question_id);
-            response.redirect(`/topics/${topic_id}`);
-        }
 
-        else {
-            response.redirect(`/topics/${topic_id}/questions/${question_id}`);
-        }
+    if ((await answerOptionService.allQuestionAnsOptions(question_id)).length < 1) {
+        await questionService.deleteQuestion(question_id);
+        response.redirect(`/topics/${topic_id}`);
     }
 
     else {
