@@ -6,6 +6,7 @@ import * as loginController from "./controllers/loginController.js";
 import * as questionController from "./controllers/questionController.js";
 import * as answerOptionController from "./controllers/answerOptionController.js";
 import * as quizController from "./controllers/quizController.js";
+import * as apiQuiz from "./apis/quiz.js";
 
 const router = new Router();
 
@@ -24,6 +25,8 @@ router.get("/", mainController.showMain)
     .get("/quiz/:tId/questions/:qId", quizController.showQuizQuestion)
     .post("/quiz/:tId/questions/:qId/options/:oId", quizController.handleAnswer)
     .get("/quiz/:tId/questions/:qId/:result", quizController.showAnswerResult)
+    .get("/api/questions/random", apiQuiz.randomQuestion)
+    .post("/api/questions/answer", apiQuiz.answer)
     .get("/auth/register", registerController.getRegister)
     .post("/auth/register", registerController.postRegister)
     .get("/auth/login", loginController.getLogin)

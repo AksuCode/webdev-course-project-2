@@ -16,23 +16,39 @@ const showQuizTopics = async ({ render }) => {
 
 
 
-const randomTopicQuestion = async ({ response, params }) => {
+const randomTopicQuestion = async ({ response, params, render }) => {
 
     const topic_id = params.tId;
     const questions = await questionService.allTopicQuestions(topic_id);
-    const question_amount = questions.length;
+    const questions_with_options = [];
 
+    for (let i = 0; i < questions.length; i++) {
+        const question = questions[i];
+        
+        if ((await answerOptionService.allQuestionAnsOptions(question.id)).length >= 1) {
+            questions_with_options.push(question);
+        }
+    }
+
+    const question_amount = questions_with_options.length;
     if (question_amount > 0) {
         const min = Math.ceil(0);
         const max = Math.floor(question_amount - 1);
         const random_index = Math.floor(Math.random() * (max - min + 1) + min);
 
-        const question_id = questions[random_index].id;
+        const question_id = questions_with_options[random_index].id;
         response.redirect(`/quiz/${topic_id}/questions/${question_id}`);
     }
 
     else {
-        response.body = "There are no questions so far for the topic.";
+
+        const data = {
+            question: {},
+            answer_options: [],
+            question_found: false,
+        }
+
+        render("quiz_question.eta", data);
     }
 
 }
@@ -46,6 +62,7 @@ const showQuizQuestion = async ({ render, params }) => {
     const data = {
         question: (await questionService.questionWithId(question_id))[0],
         answer_options: await answerOptionService.allQuestionAnsOptions(question_id),
+        question_found: true,
     }
 
     render("quiz_question.eta", data);

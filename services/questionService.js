@@ -4,6 +4,10 @@ const allTopicQuestions = async (topic_id) => {
     return await sql`SELECT * FROM questions WHERE topic_id = ${topic_id}`;
 }
 
+const allQuestions = async () => {
+    return await sql`SELECT * FROM questions`;
+}
+
 const deleteQuestionsOfTopic = async (topic_id) =>  {
     await sql`DELETE FROM questions WHERE topic_id = ${topic_id}`;
 }
@@ -20,4 +24,11 @@ const deleteQuestion = async (id) =>  {
     await sql`DELETE FROM questions WHERE id = ${id}`;
 }
 
-export { allTopicQuestions, deleteQuestionsOfTopic, addQuestion, questionWithId, deleteQuestion };
+export { 
+        allTopicQuestions, 
+        deleteQuestionsOfTopic, 
+        addQuestion, 
+        questionWithId, 
+        deleteQuestion,
+        allQuestions,
+    };

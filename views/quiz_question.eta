@@ -1,14 +1,23 @@
 <% layout("./layouts/layout.eta") %>
 
-<h1><%= it.question.question_text %></h1>
+<% if (it.question_found)  { %>
 
-<% if (it.answer_options.length > 0) { %>
-    <table>
-        <% it.answer_options.forEach( (option) => { %>
-            <tr>
-                <td><%= option.option_text %></td>
-                <td><form method="POST" action="/quiz/<%= it.question.topic_id %>/questions/<%= it.question.id %>/options/<%= option.id %>"><input type="submit" value="Choose"></form></td>
-            </tr>
-        <% }); %>
-    </table>
+    <h1><%= it.question.question_text %></h1>
+
+    <% if (it.answer_options.length > 0) { %>
+        <table>
+            <% it.answer_options.forEach( (option) => { %>
+                <tr>
+                    <td><%= option.option_text %></td>
+                    <td><form method="POST" action="/quiz/<%= it.question.topic_id %>/questions/<%= it.question.id %>/options/<%= option.id %>"><input type="submit" value="Choose"></form></td>
+                </tr>
+            <% }); %>
+        </table>
+    <% } %>
+
+<% } else { %>
+
+    <h1>No Questions!</h1>
+
+    <p>There are no questions so far for the topic.<p> <a href="/quiz">Back</a>
 <% } %>
